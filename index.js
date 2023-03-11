@@ -1,4 +1,5 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const { connectToMongoDB } = require("./connect");
@@ -12,10 +13,11 @@ const userRoute = require("./routes/user");
 const app = express();
 const PORT = 8001;
 
-connectToMongoDB("mongodb://localhost:27017/short-url").then(() =>
-  console.log("Mongodb connected")
-);
-
+mongoose
+  .connect(
+    "mongodb+srv://mujtabafarooqdev_db_user:Cafe12345@cluster0.u6hhlyf.mongodb.net/cafedb?retryWrites=true&w=majority&appName=Cluster0",
+  )
+  .then(() => console.log("MongoDB connected..."));
 app.set("view engine", "ejs");
 app.set("views", path.resolve("./views"));
 
@@ -39,7 +41,7 @@ app.get("/url/:shortId", async (req, res) => {
           timestamp: Date.now(),
         },
       },
-    }
+    },
   );
   res.redirect(entry.redirectURL);
 });
